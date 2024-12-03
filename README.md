@@ -13,6 +13,8 @@ It allows users to perform efficient and comprehensive searches across various w
 
 To install `openwebui-exa-tool`, view the open-webui documentation on how to install tools: https://docs.openwebui.com/features/plugin/tools/#how-to-install-tools
 
+You can install directly via https://openwebui.com/t/nstielau/exa_web_search_tool
+
 ## Usage
 
 After installation, you must set your Exa API Key, which you can find/generate at https://dashboard.exa.ai/api-keys
