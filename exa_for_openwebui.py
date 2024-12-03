@@ -79,3 +79,29 @@ class Tools:
             done=True,
         )
         return str(search_results)
+
+
+if __name__ == "__main__":
+    import sys
+    import unittest
+    from unittest.mock import AsyncMock, patch
+
+    class TestExaForOpenWebUI(unittest.TestCase):
+        def setUp(self):
+            self.tools = Tools()
+            self.tools.valves.EXA_API_KEY = "test_api_key"
+
+        @patch('exa_py.Exa.search_and_contents', new_callable=AsyncMock)
+        async def test_search_web_success(self, mock_search_and_contents):
+            mock_search_and_contents.return_value = {"results": "some content"}
+            result = await self.tools.search_web("test query")
+            self.assertIn("some content", result)
+
+        @patch('exa_py.Exa.search_and_contents', new_callable=AsyncMock)
+        async def test_search_web_failure(self, mock_search_and_contents):
+            mock_search_and_contents.side_effect = Exception("Test error")
+            result = await self.tools.search_web("test query")
+            self.assertIn("error", result)
+
+    if len(sys.argv) > 1 and sys.argv[1] == "tests":
+        unittest.main(argv=sys.argv[:1])
