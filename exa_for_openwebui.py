@@ -5,14 +5,17 @@ author_url: https://github.com/nstielau
 git_url: https://github.com/nstielau/openwebui-exa-tool.git
 description: This tool integrates Exa for web searching within OpenWebUI.
 required_open_webui_version: 0.4.0
-requirements: exa_py
+requirements: exa_py, fire, python-dotenv
 version: 0.1.0
 licence: MIT
 """
 
 import asyncio
 import json
+import fire
+import os
 from typing import Any, Callable
+from dotenv import load_dotenv
 
 from exa_py import Exa
 from pydantic import BaseModel, Field
@@ -35,10 +38,12 @@ class EventEmitter:
                 }
             )
 
+load_dotenv()
+
 class Tools:
     class Valves(BaseModel):
         EXA_API_KEY: str = Field(
-            default="EXA_API_KEY",
+            default=os.getenv("EXA_API_KEY", "EXA_API_KEY"),
             description="API key for Exa",
         )
 
@@ -71,6 +76,7 @@ class Tools:
                 description=f"Error during Exa search: {str(e)}",
                 done=True,
             )
+            raise e
             return json.dumps({"error": str(e)})
 
         await emitter.emit(
@@ -80,6 +86,14 @@ class Tools:
         )
         return str(search_results)
 
+
+def cli(query: str):
+    tools = Tools()
+    async def stdout_emitter(event):
+        print(json.dumps(event))
+
+    result = asyncio.run(tools.search_web(query, __event_emitter__=stdout_emitter))
+    print(result)
 
 if __name__ == "__main__":
     import sys
@@ -105,3 +119,5 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1 and sys.argv[1] == "tests":
         unittest.main(argv=sys.argv[:1])
+    else:
+        fire.Fire(cli)
