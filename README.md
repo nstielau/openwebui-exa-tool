@@ -19,6 +19,20 @@ You can install directly via https://openwebui.com/t/nstielau/exa_web_search_too
 
 After installation, you must set your Exa API Key, which you can find/generate at https://dashboard.exa.ai/api-keys
 
+For local developement, you can set your EXA_API_KEY environment variable via a .env file, or otherwise via environment.
+
+To run the tests, run
+
+```
+python exa_for_openwebui.py tests
+```
+
+To run the web search via CLI, run
+
+```
+python exa_for_openwebui.py "animal husbandry
+```
+
 
 ## License
 
