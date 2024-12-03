@@ -6,7 +6,7 @@ git_url: https://github.com/nstielau/openwebui-exa-tool.git
 description: This tool integrates Exa for web searching within OpenWebUI.
 required_open_webui_version: 0.4.0
 requirements: exa_py, fire, python-dotenv
-version: 0.1.0
+version: 0.2.0
 licence: MIT
 """
 
